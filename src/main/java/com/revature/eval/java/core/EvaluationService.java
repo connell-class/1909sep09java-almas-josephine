@@ -1,8 +1,11 @@
 package com.revature.eval.java.core;
 
 import java.time.temporal.Temporal;
+// need to use what sort of methods the temporal import has 
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
+
 
 public class EvaluationService {
 
@@ -29,10 +32,33 @@ public class EvaluationService {
 	 * @param phrase
 	 * @return
 	 */
-	public String acronym(String phrase) {
-		// TODO Write an implementation for this method declaration
-		return null;
-	}
+	public String acronym(String phrase) //phrase
+		{
+			// TODO Write an implementation for this method declaration
+			/* Goal Output: TLC
+			*/
+		/* turn string into a char array
+		 * char array to as long as you need it ... 3
+		 */
+		    String acro = phrase.substring(0,1); 
+		    
+		    // create a for loop to scan  a string 
+		    
+		    char a;
+		    // let's create a for loop to scan the acronym array 
+		    for(int i = 0; i < phrase.length(); i++)
+		    {
+		    	a = phrase.charAt(i);
+		    	//let's find space and dashing without the array
+		    	if(a == ' ' || a == '-') {
+		    		acro = acro + Character.toString(phrase.charAt(i+1));
+		    	}
+		    }
+		    return acro;
+			
+			
+		}
+		
 
 	/**
 	 * 3. Determine if a triangle is equilateral, isosceles, or scalene. An
@@ -85,17 +111,49 @@ public class EvaluationService {
 
 		public boolean isEquilateral() {
 			// TODO Write an implementation for this method declaration
-			return false;
+			boolean c=false;
+			/*
+			 * nested ifs should work
+			 * property of equilaterals: all sides are equal
+			 */
+			
+			if (sideOne == sideTwo & sideOne == sideThree) {
+			
+			c=true;
+			}
+			return c;
 		}
 
 		public boolean isIsosceles() {
 			// TODO Write an implementation for this method declaration
-			return false;
+			/*
+			 * property of an isosceles triangle: two sides MUST be equal
+			 */
+			if(sideOne == sideTwo)
+			{
+				return true;
+			}
+			else if(sideOne == sideThree)
+			{
+				return true;
+			}
+			else
+				return false;
 		}
 
 		public boolean isScalene() {
 			// TODO Write an implementation for this method declaration
-			return false;
+			/*
+			 * property of scalene: ALL sides are different
+			 */
+			// test for sideOne != sideTwo AND != sideThree
+			if(sideOne != sideTwo && sideOne != sideThree)
+			{
+				return true;
+			}
+			
+			else
+				return false;
 		}
 
 	}
@@ -117,7 +175,76 @@ public class EvaluationService {
 	 */
 	public int getScrabbleScore(String string) {
 		// TODO Write an implementation for this method declaration
-		return 0;
+		/*
+		 * Goal: Compute scrabble score. 
+		 * 		 Convert a letter to its associating integer value (string to char to int)
+		 * 		 Adding calculator 
+		 * Strategy: Map and hashMap 
+		 *  		Map: to have a key associated with an integer value (NULL KEYS & VALUES are NOT ok)
+		 *  			Duplicate values are ALLOWED
+		 *  			Duplicate keys are NOT ALLOWED
+		 *  		hashMap because order DOESN'T matter on how we need to store keys and values
+		 *  			HASHING is transforming an object to some number 
+		 *
+		 * Upper and lower case letters are different. This way we can have one letter a piece
+		 * since we are not returning the string, so what we do with it DOESN'T matter to the user
+		 */
+		string = string.toUpperCase();
+		/* We need something to keep score
+		 */
+		int score = 0;
+		// constructing the keys with their values
+		Map<Character, Integer> ls = new HashMap<>(); // ls = letter score
+		// 'put' keyword to make key/value pairs
+		//A, E, I, O, U, L, N, R, S, T = 1
+		ls.put('A', 1);
+		ls.put('E', 1);
+		ls.put('I', 1);
+		ls.put('O', 1);
+		ls.put('U', 1);
+		ls.put('L', 1);
+		ls.put('N', 1);
+		ls.put('R', 1);
+		ls.put('S', 1);
+		ls.put('T', 1);
+		//D, G = 2
+		ls.put('D', 2);
+		ls.put('G', 2);
+		//B, C, M, P = 3;
+		ls.put('B', 3);
+		ls.put('C', 3);
+		ls.put('M', 3);
+		ls.put('P', 3);
+		// F, H, V, W, Y = 4 
+		ls.put('F', 4);
+		ls.put('H', 4);
+		ls.put('V', 4);
+		ls.put('W', 4);
+		ls.put('Y', 4);
+		//K = 5; 
+		ls.put('K', 5);
+		//J, X = 8
+		ls.put('J', 8);
+		ls.put('X', 8);
+		//Q, Z = 10;
+		ls.put('Q', 10);
+		ls.put('Z', 10);
+		/* creating the sum calculator use a for loop and a hashmap
+		 * i = 0 starting point
+		 * condition: we need to go through each character in the string individually 
+		 * post increment
+		 */
+		for(int i = 0; i < string.length(); i++)
+		{
+			/* referencing the hashmap to add values to the score 
+			 * i is the location in the string we are checking index wise
+			 * to add to score call the hashmap
+			 * string.charAt() method gets the character based on the index 
+			 */
+			score = score + ls.get(string.charAt(i)); 
+			
+		}
+		return score;
 	}
 
 	/**
@@ -153,8 +280,71 @@ public class EvaluationService {
 	 */
 	public String cleanPhoneNumber(String string) {
 		// TODO Write an implementation for this method declaration
-		return null;
-	}
+		/*
+		 * I want to scan for +1 () - .
+		 * OUT: 1234567890 straight up just numbers 
+		 * the output is as a string
+		 */
+		// create a placeholder 
+		char n;
+		// String num is to accept any phone numbers coming 
+		String num = "";
+		/* Create a for loop to scan the string
+		 * starting at the first index [0]
+		 * the condition: as long as [0] is less than the original phone number 
+		 * 				the char being scanned will increment by one 
+		 */
+		for(int i = 0; i < string.length(); i++)
+		{
+			/*
+			 * string.charAt to check the location of the char in the string starting at i=0
+			 * Hence, we need our placeholder char n 
+			 */
+			n = string.charAt(i);
+			
+			/*
+			 * control flow statement 'if' to see if the character it is scanning is a integer
+			 * Thus, use the function Character.isDigit() . + - ' '
+			 */
+			if(Character.isDigit(n))
+			{
+				/*
+				 * condition met: add to the string
+				 * use the function Character.toString()
+				 */
+				num = num + Character.toString(n);
+			}
+		}
+			/*
+			 * control flow 'if' checks to see that the first integer in the original phone number ISN'T
+			 * 		a 1
+			 * 			use the == '1'
+			 * our goal is to get rid of it within our 'if' statement by dropping 1 off to 
+			 * 	give us a 10 digit string
+			 * 
+			 * use a short circuit AND && to check if the string greater than 10 indices 
+			 * 		use the method .length()
+			 */
+			if(num.charAt(0) == '1' && num.length() > 10)
+			{
+				/*
+				 * substring the new I have created to drop of the 1 at index [0]
+				 * when you substring, parse, trim cuts to the LEFT of the index you specify
+				 */
+				num = num.substring(1);
+				return num;
+			}
+			/*
+			 * to check that the phone number given meets all requirements and DOESN'T 
+			 * 	exceed pass 10 integers
+			 */
+			if(num.length() != 10)
+			{
+				return null;
+			}
+			return num;
+		}
+		
 
 	/**
 	 * 6. Given a phrase, count the occurrences of each word in that phrase.
@@ -420,7 +610,7 @@ public class EvaluationService {
 	}
 
 	/**
-	 * 16. Determine if a sentence is a pangram. A pangram (Greek: παν γράμμα, pan
+	 * 16. Determine if a sentence is a pangram. A pangram (Greek: Ï€Î±Î½ Î³Ï�Î¬Î¼Î¼Î±, pan
 	 * gramma, "every letter") is a sentence using every letter of the alphabet at
 	 * least once. The best known English pangram is:
 	 * 
@@ -440,13 +630,21 @@ public class EvaluationService {
 	/**
 	 * 17. Calculate the moment when someone has lived for 10^9 seconds.
 	 * 
-	 * A gigasecond is 109 (1,000,000,000) seconds.
+	 * A gigasecond is 10^9 (1,000,000,000) seconds.
 	 * 
 	 * @param given
 	 * @return
 	 */
-	public Temporal getGigasecondDate(Temporal given) {
+	public Temporal getGigasecondDate(Temporal given ) 
+	{ // 'given' is the name of the Temporal 
 		// TODO Write an implementation for this method declaration
+		/*
+		 * add a gs to the temporal time stamp
+		 * expected answer: 31.688 years
+		 */
+		
+//		given.until(10^9, YEARS);
+		
 		return null;
 	}
 
