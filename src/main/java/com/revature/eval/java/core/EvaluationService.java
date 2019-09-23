@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
-
+import java.util.List;
 public class EvaluationService {
 
 	/**
@@ -357,7 +357,37 @@ public class EvaluationService {
 	 */
 	public Map<String, Integer> wordCount(String string) {
 		// TODO Write an implementation for this method declaration
-		return null;
+		/*
+		 * I used this site as a guided reference for this problem
+		 * https://codingbat.com/doc/java-map-wordcount.html
+		 */
+		// by using a key the compiler will examine a string for each word at least ONCE
+		// before reexamining the frequency of the word in the string
+		Map<String,Integer> count = new HashMap<String, Integer>();
+		/*
+		 * An enhanced for loop can serve as effective word counter. Let's focus on a specifically on 
+		 * the conditional part of the for loop. When a string is analyzed the first, the compiler 
+		 * will store each word as a key to the map. If repetition is seen, then the for loop 
+		 * will increment by 1.  
+		 */
+		String[] phrases = string.split(" "); // regex = patterns 
+		for(String p: phrases) 
+		{
+			// I don't know what purpose this conditional statement does?
+			if(!count.containsKey(p))
+			{
+				count.put(p,1); // store each word as a key with value 1
+			}
+			// this part of the code is where the increment and word count 
+			else
+			{
+				int words = count.get(p);
+				count.put(p, words + 1);
+			}
+		}
+		
+		
+		return count;
 	}
 
 	/**
@@ -397,7 +427,7 @@ public class EvaluationService {
 	 */
 	static class BinarySearch<T> {
 		private List<T> sortedList;
-
+		
 		public int indexOf(T t) {
 			// TODO Write an implementation for this method declaration
 			return 0;
@@ -437,6 +467,11 @@ public class EvaluationService {
 	 */
 	public String toPigLatin(String string) {
 		// TODO Write an implementation for this method declaration
+		/* Reference guide on this site
+		 * https://www.geeksforgeeks.org/encoding-word-pig-latin
+		 */
+
+		
 		return null;
 	}
 
@@ -455,8 +490,48 @@ public class EvaluationService {
 	 * @param input
 	 * @return
 	 */
-	public boolean isArmstrongNumber(int input) {
-		// TODO Write an implementation for this method declaration
+	public boolean isArmstrongNumber(int input) 
+	{
+		/*
+		 * Here are the sites that gave me some guidance/direction
+		 * https://www.geeksforgeeks.org/java-program-to-check-armstrong-number/
+		 * https://www.programmingsimplified.com/java/source-code/java-program-armstrong-number
+		 */
+		// we will convert the int input into a string by toString(); method
+		String num = Integer.toString(input);
+		int check=input; // hold input steady at the end for the next
+		// now I want to find the length of the string so I can store it as a number of digits
+		int ndigits = num.length();
+		// create an Int array to store the number, but right now is currently empty 
+		int[] ia = new int[ndigits];
+		/* for loop to iterate to get the input into the array
+		 * i = 0; starting index
+		 * i < ia.length; Condition to store every digit
+		 * i++ 
+		 */
+		for(int i = 0; i < ia.length; i++)
+		{
+			/* [] to assign a value to a given index
+			 * perform % on 'input'to get the last digit of the given number
+			 */
+			ia[i] = input % 10;
+			input /= 10; // division assignment
+		}
+		/*
+		 * create a another for loop to create a calculator to the sum of the digits rised to the power
+		 */
+		int sum = 0; // summation variable 
+		for (int j = 0; j < ia.length; j++)
+		{
+			// NOT using the whole array and I am raising it to the number of digits --> ndigits
+			sum += Math.pow(ia[j], ndigits);
+		}
+		// create a checking method for the return type of boolean 
+		if(sum == check)
+		{
+			return true;
+		}
+		else 
 		return false;
 	}
 
