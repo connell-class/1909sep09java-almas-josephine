@@ -4,6 +4,7 @@ import java.time.temporal.Temporal;
 // need to use what sort of methods the temporal import has 
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.HashMap;
 
 import java.util.List;
@@ -471,8 +472,47 @@ public class EvaluationService {
 		 * https://www.geeksforgeeks.org/encoding-word-pig-latin
 		 */
 
-		
-		return null;
+		/* Rule 1: Finding the vowel and adding "ay" at the end
+		 * First, we must make a method to examine the string for the first vowel in index [0]
+		 * let's examine the string for a vowel
+		 */
+			StringBuilder con = new StringBuilder();
+			StringBuilder str2 = new StringBuilder();
+			for(int j =0; j < string.length(); j++)
+			{
+				if(string.split(""))
+				{
+					
+				}
+			
+					for(int i = 0; i < string.length(); i++)
+					{
+						switch(string.charAt(i)) 
+						{
+							case 'a':
+							case 'e':
+							case 'i':
+							case 'o':
+							case 'u':
+								str2 = new StringBuilder(string.substring(i) + con.toString() + "ay");
+								i = string.length();
+								break;
+								//return str2.toString();
+							default: 
+			// Rule 2: consonants shifting to the end and adding "ay"
+									/* shift the first two indices at the end
+									 * for loop to scan the string array 
+									 */
+								con.append(string.charAt(i));
+								break;
+										
+									
+						}
+					}
+				
+				
+			return str2.toString();
+	}
 	}
 
 	/**
@@ -504,7 +544,7 @@ public class EvaluationService {
 		int ndigits = num.length();
 		// create an Int array to store the number, but right now is currently empty 
 		int[] ia = new int[ndigits];
-		/* for loop to iterate to get the input into the array
+		/* for loop to iterate to get the values of the input into the array
 		 * i = 0; starting index
 		 * i < ia.length; Condition to store every digit
 		 * i++ 
@@ -585,7 +625,45 @@ public class EvaluationService {
 		}
 
 		public String rotate(String string) {
-			// TODO Write an implementation for this method declaration
+			/*
+			 * Make two hashMaps. Let's make the string all uppercase. First create a counter
+			 */
+			string = string.toUpperCase();
+			int counter = 0;
+			Map<Character, Integer> l = new TreeMap<>();
+			l.put('A', 1);
+			l.put('E', 1);
+			l.put('I', 1);
+			l.put('O', 1);
+			l.put('U', 1);
+			l.put('L', 1);
+			l.put('N', 1);
+			l.put('R', 1);
+			l.put('S', 1);
+			l.put('T', 1);
+			//D, G = 2
+			l.put('D', 2);
+			l.put('G', 2);
+			//B, C, M, P = 3;
+			l.put('B', 3);
+			l.put('C', 3);
+			l.put('M', 3);
+			l.put('P', 3);
+			// F, H, V, W, Y = 4 
+			l.put('F', 4);
+			l.put('H', 4);
+			l.put('V', 4);
+			l.put('W', 4);
+			l.put('Y', 4);
+			//K = 5; 
+			l.put('K', 5);
+			//J, X = 8
+			l.put('J', 8);
+			l.put('X', 8);
+			//Q, Z = 10;
+			l.put('Q', 10);
+			l.put('Z', 10);
+		
 			return null;
 		}
 
