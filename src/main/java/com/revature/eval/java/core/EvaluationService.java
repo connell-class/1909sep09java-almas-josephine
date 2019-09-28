@@ -1,5 +1,6 @@
 package com.revature.eval.java.core;
 
+import java.time.Duration;
 import java.time.temporal.Temporal;
 // need to use what sort of methods the temporal import has 
 import java.util.List;
@@ -476,15 +477,13 @@ public class EvaluationService {
 		 * First, we must make a method to examine the string for the first vowel in index [0]
 		 * let's examine the string for a vowel
 		 */
-			StringBuilder con = new StringBuilder();
+			StringBuilder con = new StringBuilder(); //words with the first index = consonant 
 			StringBuilder str2 = new StringBuilder();
-			for(int j =0; j < string.length(); j++)
+			StringBuilder str3 = new StringBuilder();
+			for(int j = 0 ; j < string.length(); j++)
 			{
-				if(string.split(""))
-				{
-					
-				}
-			
+					if(string.contains(" "));
+					{
 					for(int i = 0; i < string.length(); i++)
 					{
 						switch(string.charAt(i)) 
@@ -495,24 +494,24 @@ public class EvaluationService {
 							case 'o':
 							case 'u':
 								str2 = new StringBuilder(string.substring(i) + con.toString() + "ay");
+								str3 = new StringBuilder(string.substring(j)+con.toString()+"ay");
+								j = string.length();
 								i = string.length();
 								break;
 								//return str2.toString();
 							default: 
-			// Rule 2: consonants shifting to the end and adding "ay"
+								// Rule 2: consonants shifting to the end and adding "ay"
 									/* shift the first two indices at the end
 									 * for loop to scan the string array 
 									 */
 								con.append(string.charAt(i));
 								break;
-										
-									
 						}
 					}
-				
-				
-			return str2.toString();
+			return str2.toString();		
+					}
 	}
+			
 	}
 
 	/**
@@ -796,9 +795,14 @@ public class EvaluationService {
 		 * expected answer: 31.688 years
 		 */
 		
-//		given.until(10^9, YEARS);
-		
-		return null;
+//		first convert gigaseconds to the actually amount
+		final long gigas= 1000000000;
+		// gigaseconds to days 60s to 60min to 24 hours
+		final long gDays = gigas/60/60/24;
+		//
+		Duration a = Duration.ofDays(gDays);
+		Temporal date = a.addTo(given);
+		return date;
 	}
 
 	/**
