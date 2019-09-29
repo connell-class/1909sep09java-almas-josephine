@@ -431,8 +431,55 @@ public class EvaluationService {
 		private List<T> sortedList;
 		
 		public int indexOf(T t) {
-			// TODO Write an implementation for this method declaration
-			return 0;
+			/*
+			 * make a int that starts at the last index of the sortedList
+			 */
+			int l = (sortedList.size()-1); // -1 to prevent OutOfBounds errors
+			/*
+			 * make another int that starts at zero as a placeholder
+			 */
+			int i = 0;
+			/*
+			 * make another into to call the input t to make it into a string to parse it to an int
+			 */
+			int result = Integer.parseInt(t.toString()); // saving whatever integer is the list
+			/*
+			 * make a while to check to see if the int i < int l
+			 */
+			while(i<=l)
+			{
+				/*
+				 * make another int to be in the middle of i and l
+				 */
+				int m = (i + l)/2; // start to evaluate which side to parse
+				/*
+				 * make another in to store the value of m. What is happening to m 
+				 * is it is being evaluate against 'result'. 
+				 */
+				int x = Integer.parseInt(sortedList.get(m).toString());
+				if(x > result)
+				{
+					/*
+					 * we are taking l and making it equal to m - 1
+					 */
+					l = m-1;
+				}
+				/*
+				 * add an 'else if' to do the opposite of the 'if' statement
+				 */
+				else if (x < result)
+				{
+					/*
+					 * go the right side of the whatever the index of 'm' is
+					 */
+					i = m + 1;
+				}
+				else
+				{
+					return m;
+				}
+			}
+			return -1;
 		}
 
 		public BinarySearch(List<T> sortedList) {
@@ -477,6 +524,7 @@ public class EvaluationService {
 		 * First, we must make a method to examine the string for the first vowel in index [0]
 		 * let's examine the string for a vowel
 		 */
+			string = "quick fast run";
 			StringBuilder con = new StringBuilder(); //words with the first index = consonant 
 			StringBuilder str2 = new StringBuilder();
 			StringBuilder str3 = new StringBuilder();
@@ -494,8 +542,6 @@ public class EvaluationService {
 							case 'o':
 							case 'u':
 								str2 = new StringBuilder(string.substring(i) + con.toString() + "ay");
-								str3 = new StringBuilder(string.substring(j)+con.toString()+"ay");
-								j = string.length();
 								i = string.length();
 								break;
 								//return str2.toString();
@@ -507,10 +553,13 @@ public class EvaluationService {
 								con.append(string.charAt(i));
 								break;
 						}
-					}
-			return str2.toString();		
+					} str3 = new StringBuilder(string.substring(j) + con.toString()+"ay");
+					  str3.append(c)
 					}
 	}
+			System.out.println("Str2: " + str2.toString());
+			System.out.println("Str3: " + str3.toString());
+			System.out.println("");
 			
 	}
 
