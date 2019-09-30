@@ -1,13 +1,18 @@
 package com.revature.eval.java.core;
 
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 // need to use what sort of methods the temporal import has 
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.ArrayList;
 import java.util.HashMap;
-
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 public class EvaluationService {
 
@@ -554,13 +559,14 @@ public class EvaluationService {
 								break;
 						}
 					} str3 = new StringBuilder(string.substring(j) + con.toString()+"ay");
-					  str3.append(c)
+					  str3.append(j);
 					}
 	}
 			System.out.println("Str2: " + str2.toString());
 			System.out.println("Str3: " + str3.toString());
 			System.out.println("");
 			
+			return string;
 	}
 
 	/**
@@ -672,50 +678,60 @@ public class EvaluationService {
 			this.key = key;
 		}
 
-		public String rotate(String string) {
-			/*
-			 * Make two hashMaps. Let's make the string all uppercase. First create a counter
-			 */
-			string = string.toUpperCase();
-			int counter = 0;
-			Map<Character, Integer> l = new TreeMap<>();
-			l.put('A', 1);
-			l.put('E', 1);
-			l.put('I', 1);
-			l.put('O', 1);
-			l.put('U', 1);
-			l.put('L', 1);
-			l.put('N', 1);
-			l.put('R', 1);
-			l.put('S', 1);
-			l.put('T', 1);
-			//D, G = 2
-			l.put('D', 2);
-			l.put('G', 2);
-			//B, C, M, P = 3;
-			l.put('B', 3);
-			l.put('C', 3);
-			l.put('M', 3);
-			l.put('P', 3);
-			// F, H, V, W, Y = 4 
-			l.put('F', 4);
-			l.put('H', 4);
-			l.put('V', 4);
-			l.put('W', 4);
-			l.put('Y', 4);
-			//K = 5; 
-			l.put('K', 5);
-			//J, X = 8
-			l.put('J', 8);
-			l.put('X', 8);
-			//Q, Z = 10;
-			l.put('Q', 10);
-			l.put('Z', 10);
-		
-			return null;
-		}
+		public String rotate(String string)
+		{
+			// Let's convert the string into a char array. use '.toCharArray()' method
+            char[] stringConverter = string.toCharArray();
+            /* ammend the given string by using the class StringBuilder 
+			* to store the final result.
+			*/            
+            StringBuilder result = new StringBuilder();
+            //Create two string arrays containing the letters of the alphabet
+            String a = "abcdefghijklmnopqrstuvwxyz";
+            String A = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            //Use an enhanced for loop to start scanning the array
+            for (char parser : stringConverter) 
+            {
 
-	}
+				/*
+				 * 'Character.isLetter' will check the array for a non-letters. returns true
+				 * is the index contains a letter
+				 */            
+            	if(Character.isLetter(parser)) 
+                    {
+                            if(Character.isUpperCase(parser)) 
+                            {
+
+/*
+ * now starts the shifting process. We need a counter based on the char
+ * index. Hence, use the method '.indexOf'. We will use that method in
+ * unison of the method 'Character.toString()' and the given key
+ */                            	
+                                  int shifted = A.indexOf(Character.toString(parser)) + key;
+                                    while (shifted > 25) 	// transposing process
+                                    {
+                                            shifted -= 26;
+                               		}
+                                    result.append(A.charAt(shifted));
+                        	 } 
+                            else 
+                            {
+                                    int shifted = a.indexOf(Character.toString(parser)) + key;
+                                    while (shifted > 25) 
+                                    {
+                                            shifted -= 26;
+                                    }
+                                    result.append(a.charAt(shifted));
+                            }
+                    } 
+                    else 
+                    {
+                            result.append(parser);
+                    }
+            }
+            return result.toString();
+    }
+}
 
 	/**
 	 * 12. Given a number n, determine what the nth prime is.
@@ -729,220 +745,494 @@ public class EvaluationService {
 	 * @param i
 	 * @return
 	 */
-	public int calculateNthPrime(int i) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+	public int calculateNthPrime(int i)
+	{
+		// start with prime integer
+		// Thanks wiki for helping with the starting place 
+		// https://en.wikipedia.org/wiki/Primality_test
+        int prime = 5;
+        /* we need a way to check if the given integer i is NOT equal to zero
+         * REASON: 0 is NOT prime
+         */
+        if (i == 0) 
+        {
+                throw new IllegalArgumentException("0th Prime does not exist.");
+        } 
+        else if (i == 1) 
+        {
+                return 2;
+        } 
+        else if (i == 2) 
+        {
+                return 3;
+        }
+        // while loop go past the prime digit 3. 
+        while(i >= 3) 
+        	{
+                while(!isPrime(prime))
+                {
+                	// not a 
+                	prime++; // continue scanning
+                }
+                prime++; // post increment (we find a prime)
+                i--; 
+                /* counting backwards to check if the located prime is the index
+                 *  we are looking for 'nth prime'
+                 */
+        	}
+        return prime -1; //does NOT exist in the array
+}
+
+public boolean isPrime(int n) {
+        if (n <= 3 && n > 1) {
+                return true;
+        } else if (n % 2 == 0 || n % 3 == 0) {
+                return false;
+        }
+        int i = 5;
+        while (i * i <= n) {
+                if (n % i == 0 || n % (i + 2) == 0) {
+                        return false;
+                }
+                i += 6;
+        }
+        return true;
+        
+}
 	}
 
+
+/**
+ * 13 & 14. Create an implementation of the atbash cipher, an ancient encryption
+ * system created in the Middle East.
+ *
+ * The Atbash cipher is a simple substitution cipher that relies on transposing
+ * all the letters in the alphabet such that the resulting alphabet is
+ * backwards. The first letter is replaced with the last letter, the second with
+ * the second-last, and so on.
+ *
+ * An Atbash cipher for the Latin alphabet would be as follows:
+ *
+ * Plain: abcdefghijklmnopqrstuvwxyz Cipher: zyxwvutsrqponmlkjihgfedcba It is a
+ * very weak cipher because it only has one possible key, and it is a simple
+ * monoalphabetic substitution cipher. However, this may not have been an issue
+ * in the cipher's time.
+ *
+ * Ciphertext is written out in groups of fixed length, the traditional group
+ * size being 5 letters, and punctuation is excluded. This is to make it harder
+ * to guess things based on word boundaries.
+ *
+ * Examples Encoding test gives gvhg Decoding gvhg gives test Decoding gsvjf
+ * rxpyi ldmul cqfnk hlevi gsvoz abwlt gives thequickbrownfoxjumpsoverthelazydog
+ *
+ */
+class AtbashCipher{ 
+
+
+    /**
+     * Question 13
+     *
+     * @param string
+     * @return
+     */
+    public static String encode(String string) {
+            /*
+             * make a char array which lower cases all the letters. Use a
+             * StringBuilder to ammend the given string to by encrypted 
+             */
+            char[] p = string.toLowerCase().toCharArray();
+            StringBuilder result = new StringBuilder();
+            
+            String a = "abcdefghijklmnopqrstuvwxyz"; // going forward
+            String z = "zyxwvutsrqponmlkjihgfedcba"; // going backward
+            
+            for (char c : p) 
+            { // scans the char array
+                    if (Character.isLetter(c)) 
+                    {
+                            int index = a.indexOf(Character.toString(c));
+                            result.append(z.charAt(index));
+                    } 
+                    else if (Character.isDigit(c)) 
+                    {
+                            result.append(c);
+                    }
+            }
+            
+            for(int i = 5; i < string.length(); i+=6) {
+                    result.insert(i, " ");
+            }
+            // remember that you always start at 0
+            //so I an inserting after every 6
+            // 0-5 = 6
+            // so the first inserting " " is at the 5th index aka 6th element
+            // so for your modulus, you have to make sure ur indexing is in the order u want
+            
+            int lastIndex = result.length()-1;
+            
+            if(result.charAt(lastIndex) == ' ') 
+            {
+                    result.deleteCharAt(lastIndex);
+                    /* safety precaution for a string that has 
+  				   * space at the end basically an odd number
+  				   * indices. The StringBuilder will add an extra space at the 5th element 
+  				   */                    
+            }
+            return result.toString();
+    }
+
+
+    /**
+     * Question 14
+     *
+     * @param string
+     * @return
+     */
+    public static String decode(String string) {
+            // TODO Write an implementation for this method declaration
+            char[] parse = string.toLowerCase().toCharArray();
+            StringBuilder real = new StringBuilder();
+            // Holds decrypt message
+            
+            String a = "abcdefghijklmnopqrstuvwxyz"; // REAL alphabet
+            String z = "zyxwvutsrqponmlkjihgfedcba"; // the substitution
+            
+            for (char c : parse) 
+            {
+                    if (Character.isLetter(c)) 
+                    { // the start of the decryption 
+                            int index = z.indexOf(Character.toString(c));
+                            real.append(a.charAt(index));
+                    } 
+                    else if (Character.isDigit(c)) 
+                    {
+                            real.append(c);
+                    }
+            }
+              return real.toString();
+    }
+   
 	/**
-	 * 13 & 14. Create an implementation of the atbash cipher, an ancient encryption
-	 * system created in the Middle East.
-	 * 
-	 * The Atbash cipher is a simple substitution cipher that relies on transposing
-	 * all the letters in the alphabet such that the resulting alphabet is
-	 * backwards. The first letter is replaced with the last letter, the second with
-	 * the second-last, and so on.
-	 * 
-	 * An Atbash cipher for the Latin alphabet would be as follows:
-	 * 
-	 * Plain: abcdefghijklmnopqrstuvwxyz Cipher: zyxwvutsrqponmlkjihgfedcba It is a
-	 * very weak cipher because it only has one possible key, and it is a simple
-	 * monoalphabetic substitution cipher. However, this may not have been an issue
-	 * in the cipher's time.
-	 * 
-	 * Ciphertext is written out in groups of fixed length, the traditional group
-	 * size being 5 letters, and punctuation is excluded. This is to make it harder
-	 * to guess things based on word boundaries.
-	 * 
-	 * Examples Encoding test gives gvhg Decoding gvhg gives test Decoding gsvjf
-	 * rxpyi ldmul cqfnk hlevi gsvoz abwlt gives thequickbrownfoxjumpsoverthelazydog
-	 *
-	 */
-	static class AtbashCipher {
-
-		/**
-		 * Question 13
-		 * 
-		 * @param string
-		 * @return
-		 */
-		public static String encode(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
-		}
-
-		/**
-		 * Question 14
-		 * 
-		 * @param string
-		 * @return
-		 */
-		public static String decode(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
-		}
-	}
-
-	/**
-	 * 15. The ISBN-10 verification process is used to validate book identification
+	 *15. The ISBN-10 verification process is used to validate book identification
 	 * numbers. These normally contain dashes and look like: 3-598-21508-8
-	 * 
+	 *
 	 * ISBN The ISBN-10 format is 9 digits (0 to 9) plus one check character (either
 	 * a digit or an X only). In the case the check character is an X, this
 	 * represents the value '10'. These may be communicated with or without hyphens,
 	 * and can be checked for their validity by the following formula:
-	 * 
+	 *
 	 * (x1 * 10 + x2 * 9 + x3 * 8 + x4 * 7 + x5 * 6 + x6 * 5 + x7 * 4 + x8 * 3 + x9
 	 * * 2 + x10 * 1) mod 11 == 0 If the result is 0, then it is a valid ISBN-10,
 	 * otherwise it is invalid.
-	 * 
+	 *
 	 * Example Let's take the ISBN-10 3-598-21508-8. We plug it in to the formula,
 	 * and get:
-	 * 
+	 *
 	 * (3 * 10 + 5 * 9 + 9 * 8 + 8 * 7 + 2 * 6 + 1 * 5 + 5 * 4 + 0 * 3 + 8 * 2 + 8 *
 	 * 1) mod 11 == 0 Since the result is 0, this proves that our ISBN is valid.
-	 * 
+	 *
 	 * @param string
 	 * @return
 	 */
-	public boolean isValidIsbn(String string) {
-		// TODO Write an implementation for this method declaration
-		return false;
-	}
+public boolean isValidIsbn(String string) {
+        // First convert the string into a char array
+        char[] parser = string.toCharArray();
+        // store the possible values into an ArrayList
+        List<Integer> n = new ArrayList<>();
+        
+        for (char c : parser) //scans the char array
+        {
+                if(Character.isDigit(c)) 
+                { n.add(Integer.parseInt(Character.toString(c))); }
+                else if(c == 'X')
+                { n.add(10); }
+                else if (c != '-')
+                { return false; }
+        }
+        int multiplier = 10; //X*10
+        for (int i = 0; i < 10; i++) 
+        {
+                
+                n.set(i, n.get(i) * multiplier--);
+                
+        }
+        int sum = 0; // the starter for adding the overrall sum        
+        Iterator<Integer> repeat = n.iterator();
+        // it keeps adding with each increment
+         while(repeat.hasNext())
+         {
+                  int i = (int)repeat.next(); // performing a casting
+                  sum += i; // add and replace operation
+         }
+        if (sum % 11 == 0) // to check for no remainders 
+        {
+                return true;
+        }
+        
+        return false; // there is a remainder 
+}
 
-	/**
-	 * 16. Determine if a sentence is a pangram. A pangram (Greek: Ï€Î±Î½ Î³Ï�Î¬Î¼Î¼Î±, pan
-	 * gramma, "every letter") is a sentence using every letter of the alphabet at
-	 * least once. The best known English pangram is:
-	 * 
-	 * The quick brown fox jumps over the lazy dog.
-	 * 
-	 * The alphabet used consists of ASCII letters a to z, inclusive, and is case
-	 * insensitive. Input will not contain non-ASCII symbols.
-	 * 
-	 * @param string
-	 * @return
-	 */
-	public boolean isPangram(String string) {
-		// TODO Write an implementation for this method declaration
-		return false;
-	}
 
-	/**
-	 * 17. Calculate the moment when someone has lived for 10^9 seconds.
-	 * 
-	 * A gigasecond is 10^9 (1,000,000,000) seconds.
-	 * 
-	 * @param given
-	 * @return
-	 */
-	public Temporal getGigasecondDate(Temporal given ) 
-	{ // 'given' is the name of the Temporal 
-		// TODO Write an implementation for this method declaration
-		/*
-		 * add a gs to the temporal time stamp
-		 * expected answer: 31.688 years
-		 */
-		
-//		first convert gigaseconds to the actually amount
-		final long gigas= 1000000000;
-		// gigaseconds to days 60s to 60min to 24 hours
-		final long gDays = gigas/60/60/24;
-		//
-		Duration a = Duration.ofDays(gDays);
-		Temporal date = a.addTo(given);
-		return date;
-	}
+/**
+ *
+ * 16. Determine if a sentence is a pangram. A pangram (Greek: παν γράμμα, pan
+ * gramma, "every letter") is a sentence using every letter of the alphabet at
+ * least once. The best known English pangram is:
+ *
+ * The quick brown fox jumps over the lazy dog.
+ *
+ * The alphabet used consists of ASCII letters a to z, inclusive, and is case
+ * insensitive. Input will not contain non-ASCII symbols.
+ *
+ * @param string
+ * @return
+ */
+public boolean isPangram(String string) {
+        // convert string into a char array
+        char[] c = string.toCharArray();
+        // StringBuilder will enable us to manipulate a string to our will
+        StringBuilder sb = new StringBuilder("abcdefghijklmnopqrstuvwxyz");
+        
+        for (char cr : c) 
+        {// scans char array
+                if(Character.isLetter(cr) ) 
+                {
+                        int index = sb.indexOf(Character.toString(cr));
+                        if (index == -1) 
+                        {
+                        	// starts back at the top
+                                continue;
+                        }
+                        
+                        sb.deleteCharAt(index);
+                }
+        }
+        
+        if("".equals(sb.toString()))
+        {
+                return true;
+        }
+        
+        return false;
+}
 
-	/**
-	 * 18. Given a number, find the sum of all the unique multiples of particular
-	 * numbers up to but not including that number.
-	 * 
-	 * If we list all the natural numbers below 20 that are multiples of 3 or 5, we
-	 * get 3, 5, 6, 9, 10, 12, 15, and 18.
-	 * 
-	 * The sum of these multiples is 78.
-	 * 
-	 * @param i
-	 * @param set
-	 * @return
-	 */
-	public int getSumOfMultiples(int i, int[] set) {
-		// TODO Write an implementation for this method declaration
-		return 0;
-	}
 
-	/**
-	 * 19. Given a number determine whether or not it is valid per the Luhn formula.
-	 * 
-	 * The Luhn algorithm is a simple checksum formula used to validate a variety of
-	 * identification numbers, such as credit card numbers and Canadian Social
-	 * Insurance Numbers.
-	 * 
-	 * The task is to check if a given string is valid.
-	 * 
-	 * Validating a Number Strings of length 1 or less are not valid. Spaces are
-	 * allowed in the input, but they should be stripped before checking. All other
-	 * non-digit characters are disallowed.
-	 * 
-	 * Example 1: valid credit card number 1 4539 1488 0343 6467 The first step of
-	 * the Luhn algorithm is to double every second digit, starting from the right.
-	 * We will be doubling
-	 * 
-	 * 4_3_ 1_8_ 0_4_ 6_6_ If doubling the number results in a number greater than 9
-	 * then subtract 9 from the product. The results of our doubling:
-	 * 
-	 * 8569 2478 0383 3437 Then sum all of the digits:
-	 * 
-	 * 8+5+6+9+2+4+7+8+0+3+8+3+3+4+3+7 = 80 If the sum is evenly divisible by 10,
-	 * then the number is valid. This number is valid!
-	 * 
-	 * Example 2: invalid credit card number 1 8273 1232 7352 0569 Double the second
-	 * digits, starting from the right
-	 * 
-	 * 7253 2262 5312 0539 Sum the digits
-	 * 
-	 * 7+2+5+3+2+2+6+2+5+3+1+2+0+5+3+9 = 57 57 is not evenly divisible by 10, so
-	 * this number is not valid.
-	 * 
-	 * @param string
-	 * @return
-	 */
-	public boolean isLuhnValid(String string) {
-		// TODO Write an implementation for this method declaration
-		return false;
-	}
+/**
+ * 17. Calculate the moment when someone has lived for 10^9 seconds.
+ *
+ * A gigasecond is 109 (1,000,000,000) seconds.
+ *
+ * @param given
+ * @return
+ */
+public Temporal getGigasecondDate(Temporal given) {
+        // ACTUALLY EXPLICTLY CAST THE DOUBLE INTO AN INT
+        int gigasecond = (int)Math.pow(10, 9); 
+        if(given instanceof LocalDate) 
+        {
+                return ((LocalDate) given).atTime(0, 0, 0).plus(gigasecond, ChronoUnit.SECONDS);
+        }
+        else if(given instanceof LocalDateTime) 
+        {
+                return given.plus(gigasecond, ChronoUnit.SECONDS);
+        }
+        
+        return null;
+}
 
-	/**
-	 * 20. Parse and evaluate simple math word problems returning the answer as an
-	 * integer.
-	 * 
-	 * Add two numbers together.
-	 * 
-	 * What is 5 plus 13?
-	 * 
-	 * 18
-	 * 
-	 * Now, perform the other three operations.
-	 * 
-	 * What is 7 minus 5?
-	 * 
-	 * 2
-	 * 
-	 * What is 6 multiplied by 4?
-	 * 
-	 * 24
-	 * 
-	 * What is 25 divided by 5?
-	 * 
-	 * 5
-	 * 
-	 * @param string
-	 * @return
-	 */
-	public int solveWordProblem(String string) {
-		// TODO Write an implementation for this method declaration
-		return 0;
-	}
+
+/**
+ * 18. Given a number, find the sum of all the unique multiples of particular
+ * numbers up to but not including that number.
+ *
+ * If we list all the natural numbers below 20 that are multiples of 3 or 5, we
+ * get 3, 5, 6, 9, 10, 12, 15, and 18.
+ *
+ * The sum of these multiples is 78.
+ *
+ * @param i
+ * @param set
+ * @return
+ */
+
+// 15 {4, 6}
+// 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0 | n -> 0
+// 0 4 8 12 | multiples of 4
+// 0 6 12 | multiples of 6
+// 4 6 8 12 | unique
+// 30 | sum of uniques
+
+public int getSumOfMultiples(int i, int[] set) {
+        // TODO Write an implementation for this method declaration
+        
+        HashSet<Integer> hs = new HashSet<>();
+        // adding values into the HashSet
+        for (int n = 1; n < i; n++)
+        {
+                for (int j = 0; j < set.length; j++) 
+                {
+                        if(n % set[j] == 0) 
+                        {
+                                hs.add(n);
+                        }
+                }
+        }
+        
+        Iterator<Integer> iter = hs.iterator(); // iterates the hashset
+        
+        int answer = 0;
+        
+        while(iter.hasNext())
+        {
+        	answer += (int)iter.next(); //downcasting
+        }
+        
+        return answer;
+}
+
+
+/**
+ * 19. Given a number determine whether or not it is valid per the Luhn formula.
+ *
+ * The Luhn algorithm is a simple checksum formula used to validate a variety of
+ * identification numbers, such as credit card numbers and Canadian Social
+ * Insurance Numbers.
+ *
+ * The task is to check if a given string is valid.
+ *
+ * Validating a Number Strings of length 1 or less are not valid. Spaces are
+ * allowed in the input, but they should be stripped before checking. All other
+ * non-digit characters are disallowed.
+ *
+ * Example 1: valid credit card number 1 4539 1488 0343 6467 The first step of
+ * the Luhn algorithm is to double every second digit, starting from the right.
+ * We will be doubling
+ *
+ * 4_3_ 1_8_ 0_4_ 6_6_ If doubling the number results in a number greater than 9
+ * then subtract 9 from the product. The results of our doubling:
+ *
+ * 8569 2478 0383 3437 Then sum all of the digits:
+ *
+ * 8+5+6+9+2+4+7+8+0+3+8+3+3+4+3+7 = 80 If the sum is evenly divisible by 10,
+ * then the number is valid. This number is valid!
+ *
+ * Example 2: invalid credit card number 1 8273 1232 7352 0569 Double the second
+ * digits, starting from the right
+ *
+ * 7253 2262 5312 0539 Sum the digits
+ *
+ * 7+2+5+3+2+2+6+2+5+3+1+2+0+5+3+9 = 57 57 is not evenly divisible by 10, so
+ * this number is not valid.
+ *
+ * @param string
+ * @return
+ */
+public boolean isLuhnValid(String string) {
+        // 
+        if (string.length() < 1) {
+                return false;
+        }
+        
+        char[] parseString = string.toCharArray();
+        List<Integer> num = new ArrayList<>();
+        
+        for (char c : parseString) {
+                if (Character.isDigit(c)){
+                        num.add(Integer.parseInt((Character.toString(c))));
+                } else if(c == ' ') {
+                                continue;
+                } else {
+                        return false;
+                }
+        }
+        
+        for(int i = 0; i < num.size(); i++) {
+                if(isOdd(i)) {
+                        int newNum = num.get(i)*2;
+                        while(newNum > 9) {
+                                newNum -= 9;
+                        }
+                        num.set(i, newNum);
+                }
+        }
+        
+        int sum = 0;
+        Iterator<Integer> iter = num.iterator();
+        while(iter.hasNext()) {
+                sum += (int)iter.next();
+        }
+        
+        if(sum % 10 == 0) {
+                return true;
+        }
+        
+        return false;
+
+}
+public boolean isOdd(int n) {
+        if(!(n % 2 == 0)) {
+                return true;
+        }
+        return false;
+}
+
+
+/**
+ * 20. Parse and evaluate simple math word problems returning the answer as an
+ * integer.
+ *
+ * Add two numbers together.
+ *
+ * What is 5 plus 13?
+ *
+ * 18
+ *
+ * Now, perform the other three operations.
+ *
+ * What is 7 minus 5?
+ *
+ * 2
+ *
+ * What is 6 multiplied by 4?
+ *
+ * 24
+ *
+ * What is 25 divided by 5?
+ *
+ * 5
+ *
+ * @param string
+ * @return
+ */
+public int solveWordProblem(String string) {
+        // TODO Write an implementation for this method declaration
+        String[] spit = string.split("[ ?]");
+        int amRight = 0;
+        for (int i = 0; i < spit.length; i++) 
+        {
+                if(spit[i].equals("plus")) 
+                {
+                        String leftInteger = spit[i-1];
+                        String rightInteger = spit[i+1];
+                        amRight = Integer.parseInt(leftInteger) + Integer.parseInt(rightInteger);
+                } else if(spit[i].equals("minus")) {
+                        String leftInteger = spit[i-1];
+                        String rightInteger = spit[i+1];
+                        amRight = Integer.parseInt(leftInteger) - Integer.parseInt(rightInteger);
+                } else if(spit[i].equals("multiplied")) {
+                        String leftInteger = spit[i-1];
+                        String rightInteger = spit[i+2];
+                        amRight = Integer.parseInt(leftInteger) * Integer.parseInt(rightInteger);
+                } else if(spit[i].equals("divided")) {
+                        String leftInteger = spit[i-1];
+                        String rightInteger = spit[i+2];
+                        amRight = Integer.parseInt(leftInteger) / Integer.parseInt(rightInteger);
+                }
+        }
+        return amRight;
+}
+
+
+
 
 }
